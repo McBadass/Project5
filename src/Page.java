@@ -7,7 +7,7 @@ import java.util.regex.*;
  *	This class manages downloading a webpage from a Website and extracting embedded links.
  *	<p>
  *
- * @version	1.0  creation date: 2.22.2009
+ * @version	1.1  creation date: 11/4/2014
  *
  * @author	Aaron Gordon
  *	<h3>Author's address</h3>
@@ -16,6 +16,8 @@ import java.util.regex.*;
  *	Denver, CO  80217<br>
  *	gordona@msudenver.edu<br>
  *	<h3>Sample Use</h3>
+ *
+ *	***** Slightly edited by Taylor Vories *****
  *
  *   <tt>
  *   <pre>
@@ -67,9 +69,7 @@ public class Page {
 	 @param completeURL The complete url of this webpage
 	 **/
 	public Page(String completeURL) throws Exception {
-		if (completeURL.length() < 12 || !completeURL.substring(0,7).equals("http://")) {
-			msg("Page:Page  - ERROR - ERROR - ERROR - URL is [" + completeURL + "]" +
-					"\nThe url should start with: 'http://'  /n");
+		if (completeURL.length() < 5 || !completeURL.substring(0,7).equals("http://")) {
 			throw new Exception("\nThe url should start with: 'http://'  /n");
 		}
 		urls 		= new ArrayList<String>();
@@ -224,6 +224,10 @@ public class Page {
 			part[0]	= null;
 			part[1]	= whole;
 		}
+	}
+
+	public boolean isConnected() {
+		return isConnected;
 	}
 
 	public void msg(String words) {

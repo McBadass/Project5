@@ -1,31 +1,40 @@
-/**
- * Created by tvories on 10/15/14.
- */
+//-----------------------------------------------------------------------
+// Class:			KeywordList.java
+//
+// Author:			Taylor Vories
+//
+// Class:			CS 2050
+//
+// Description:		Linked List specifically designed for Keyword Objects.
+//                  It uses a sorted insert method.
+//
+// Files:		    KeywordList.java, Keyword.java
+//
+//-----------------------------------------------------------------------
+
+import java.util.ArrayList;
+
 public class KeywordList {
 
     Node head;
-    int  count = 0;
-    public final boolean DEBUG = true;
+    int  count = 0;                         // Total number of items in list
+    public final boolean DEBUG = false;     // Flag to output diagnostics to console if true
 
-    public void add(String data) {
-        Node n = new Node();
-        n.setData(data);
-        //insertion at head of list
-        n.setNext(head);
-        head = n;
-        count++;
-    }
-
-    public void add(Keyword data) {
-        add(data.getKey());
-    }
-
+    /**
+     * Adds data to the front of the Linked List.
+     * @param toAdd Node item to add.
+     */
     public void addAtFront(Node toAdd) {
         toAdd.setNext(head);
         head = toAdd;
         count++;
     }
 
+    /**
+     * Sorted insert for Keyword Linked List. Includes url the keyword was found in.
+     * @param data String of the data to add
+     * @param origUrl URL that came with the keyword
+     */
     public void append(String data, String origUrl) {
         Node n = new Node();
         Keyword toAdd = new Keyword(data);
@@ -38,12 +47,12 @@ public class KeywordList {
             }
             n.getData().addUrl(origUrl);
             head = n;
-        } else { // List not empty, check for first item
+        } else {                                                            // List not empty, check for first item
             if (DEBUG) {
                 System.out.printf("Keyword list is not empty, testing cases for %s.\n", n.getData().getKey());
             }
             Node curr = head;
-            if (n.getData().compareTo(curr.getData()) <= 0) { // If less than or equal to first item
+            if (n.getData().compareTo(curr.getData()) <= 0) {               // If less than or equal to first item
                 if (DEBUG) {
                     System.out.printf("Still searching for proper placement of %s.  It is less than %s.\n", n.getData().getKey(), curr.getData().getKey());
                 }
@@ -52,15 +61,15 @@ public class KeywordList {
                         System.out.printf("%s is less than first item in list, which is %s. Placing in front.\n", n.getData().getKey(), curr.getData().getKey());
                     }
                     n.getData().addUrl(origUrl);
-                    addAtFront(n); //Adds to the front
-                } else if (n.getData().compareTo(curr.getData()) == 0) { // Add url to existing keyword
+                    addAtFront(n);                                          //Adds to the front
+                } else if (n.getData().compareTo(curr.getData()) == 0) {    // Add url to existing keyword
                     if (DEBUG) {
                         System.out.printf("First keyword is the same! %s equals %s\n", n.getData().getKey(), curr.getData().getKey());
                     }
                     curr.getData().addUrl(origUrl);
                 }
             } else {
-                // Stops if it runs to end of list or finds its spot
+                                                                            // Stops if it runs to end of list or finds its spot
                 while (curr.getNext() != null) {
                     if (n.getData().compareTo(curr.getNext().getData()) > 0) { // If keyword is greater than current, move forward
                         if (DEBUG) {
@@ -68,7 +77,7 @@ public class KeywordList {
                         }
                         // If n is greater than current.next, keep moving
                         curr = curr.getNext();
-                    } else { // We're inbetween two points
+                    } else {                                                // We're inbetween two points
                         if (n.getData().compareTo(curr.getNext().getData()) != 0) {
                             // If the keyword DOES NOT exist
                             n.getData().addUrl(origUrl);
@@ -76,7 +85,9 @@ public class KeywordList {
                             curr.setNext(n);
                             count++;
                         } else if (n.getData().compareTo(curr.getNext().getData()) == 0){ // Add url to existing keyword
-                            System.out.println("I'm equal!");
+                            if (DEBUG) {
+                                System.out.println("I'm equal!");
+                            }
                             curr.getNext().getData().addUrl(origUrl);
                             return;
                         }
@@ -107,10 +118,18 @@ public class KeywordList {
         }
     }
 
+    /**
+     * Inserts a keyword at front of the list
+     * @param data Keyword to insert
+     * @param origUrl URL keyword was found in
+     */
     public void append(Keyword data, String origUrl) {
         append(data.getKey(), origUrl);
     }
 
+    /**
+     * Method to print out the entire list to console.
+     */
     public void print() {
         Node curr = head;
         while (curr != null) {
@@ -119,39 +138,29 @@ public class KeywordList {
         }
     }
 
-    public Keyword[] getAll() {
-        Keyword[] toReturn = new Keyword[count];
+    /**
+     * Method to retrieve the entire list as an ArrayList.
+     * @return Returns Linked List as an Array List
+     */
+    public ArrayList<Keyword> getAll() {
+        ArrayList<Keyword> toReturn = new ArrayList<Keyword>();
         Node curr = head;
-        for (int i = 0; i < count; i++) {
+        while (curr != null) {
+            toReturn.add(curr.getData());
+        }
+        //Code below caused null error.  Not sure how I set the counting wrong.
+        /*for (int i = 0; i < count; i++) {
             toReturn[i] = curr.getData();
             curr = curr.getNext();
-        }
+        }*/
         return toReturn;
     }
 
-    /*
-    public String delete(String who) {
-        String result = null;
-        if (head == null) return result;
-        if (who.equals(head.toString())) {
-            //found in first position
-            result = head.getData();
-            head = head.getNext();
-            count--;
-        } else {
-            for (Node curr = head; curr.getNext() != null; curr = curr.getNext()) {
-                //compare other to data at curr
-                Node guy = curr.getNext();
-                if (who.equals(guy.toString())) {
-                    result = guy.getData();
-                    curr.setNext(guy.getNext());
-                    count--;
-            }
-        }
-        return result;
-    }
-    */
-
+    /**
+     * Method to search for a specific keyword in the list.
+     * @param key String value of a keyword
+     * @return Returns a Keyword object if found with the URLs.
+     */
     public Keyword search(String key) {
         Keyword toReturn = null;
         // If list is empty
@@ -178,21 +187,18 @@ public class KeywordList {
         return toReturn;
     }
 
+    /**
+     * Getter
+     * @return Returns size of the Linked List
+     */
     public int size() {
         return count;
     }
 
-    /*
-    public String find(String other) {
-        for (Node curr = head; curr != null; curr = curr.getNext()) {
-            //compare other to data at curr
-                    break;
-                }
-            if (other.equals(curr.toString())) return curr.getData();
-        }
-        return null;
-    }
-    */
+    /***************************************************************************************/
+    //                  Here be the Node class
+    //**************************************************************************************/
+
 
     /**
      *	Node is a carrier class for

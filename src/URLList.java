@@ -1,6 +1,16 @@
-/**
- * Created by tvories on 10/15/14.
- */
+//-----------------------------------------------------------------------
+// Class:			URLList.java
+//
+// Author:			Taylor Vories
+//
+// Class:			CS 2050
+//
+// Description:		Linked List specifically designed for Strings containing
+//                  URLs
+//
+// Files:		    URLList.java
+//
+//-----------------------------------------------------------------------
 public class URLList {
 
     Node head;
@@ -109,9 +119,5 @@ public class URLList {
         public void setData(String obj) {
             data = obj;
         }
-
-        /*public String toString() {
-            return data.toString();
-        }*/
     } // End Node class
 }
